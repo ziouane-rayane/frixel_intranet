@@ -6,6 +6,7 @@ defmodule FrixelIntranet.Chats.IntranetConversation do
     field :conversation_type, Ecto.Enum, values: [:public, :private]
     field :conversation_status, Ecto.Enum, values: [:active, :archived]
     field :conversation_topic, :string
+    has_many :intranet_messages, FrixelIntranet.Chats.IntranetMessage
 
     timestamps(type: :utc_datetime)
   end
@@ -14,6 +15,7 @@ defmodule FrixelIntranet.Chats.IntranetConversation do
   def changeset(intranet_conversation, attrs) do
     intranet_conversation
     |> cast(attrs, [:conversation_type, :conversation_status, :conversation_topic])
+    |> cast_assoc(:intranet_conversation_id)
     |> validate_required([:conversation_type, :conversation_status, :conversation_topic])
   end
 end

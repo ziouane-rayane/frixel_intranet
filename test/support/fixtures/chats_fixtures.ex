@@ -19,4 +19,18 @@ defmodule FrixelIntranet.ChatsFixtures do
 
     intranet_conversation
   end
+
+  @doc """
+  Generate a intranet_message.
+  """
+  def intranet_message_fixture(attrs \\ %{}) do
+    {:ok, intranet_message} =
+      attrs
+      |> Enum.into(%{
+        message_body: "some message_body"
+      })
+      |> FrixelIntranet.Chats.create_intranet_message()
+
+    intranet_message
+  end
 end
