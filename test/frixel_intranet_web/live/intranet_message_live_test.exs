@@ -2,7 +2,7 @@ defmodule FrixelIntranetWeb.IntranetMessageLiveTest do
   use FrixelIntranetWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  import FrixelIntranet.ChatsFixtures
+  import FrixelIntranet.ChatFixtures
 
   @create_attrs %{message_body: "some message_body"}
   @update_attrs %{message_body: "some updated message_body"}

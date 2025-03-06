@@ -1,7 +1,7 @@
 defmodule FrixelIntranetWeb.IntranetMessageLive.FormComponent do
   use FrixelIntranetWeb, :live_component
 
-  alias FrixelIntranet.Chats
+  alias FrixelIntranet.Chat
 
   @impl true
   def render(assigns) do
@@ -19,6 +19,12 @@ defmodule FrixelIntranetWeb.IntranetMessageLive.FormComponent do
         phx-change="validate"
         phx-submit="save"
       >
+      <.input
+        field={@form[:intranet_conversation_id]}
+        type="select"
+        label="Select Conversation"
+        options={Enum.map(@conversations, fn intranet_conversation -> {intranet_conversation.conversation_topic, intranet_conversation.id} end)}
+      />
         <.input field={@form[:message_body]} type="text" label="Message body" />
         <:actions>
           <.button phx-disable-with="Saving...">Save Intranet message</.button>
@@ -27,20 +33,28 @@ defmodule FrixelIntranetWeb.IntranetMessageLive.FormComponent do
     </div>
     """
   end
+  IO.inspect(@conversations, label: "Conversations")
 
   @impl true
   def update(%{intranet_message: intranet_message} = assigns, socket) do
+    conversation_id = Map.get(assigns, :conversation_id, nil)
+
+    changeset =
+      intranet_message
+      |> Map.put(:intranet_conversation_id, conversation_id)
+      |> Chat.change_intranet_message()
+
     {:ok,
      socket
      |> assign(assigns)
-     |> assign_new(:form, fn ->
-       to_form(Chats.change_intranet_message(intranet_message))
-     end)}
+     |> assign_new(:form, fn -> to_form(changeset) end)}
   end
+
+
 
   @impl true
   def handle_event("validate", %{"intranet_message" => intranet_message_params}, socket) do
-    changeset = Chats.change_intranet_message(socket.assigns.intranet_message, intranet_message_params)
+    changeset = Chat.change_intranet_message(socket.assigns.intranet_message, intranet_message_params)
     {:noreply, assign(socket, form: to_form(changeset, action: :validate))}
   end
 
@@ -49,7 +63,7 @@ defmodule FrixelIntranetWeb.IntranetMessageLive.FormComponent do
   end
 
   defp save_intranet_message(socket, :edit, intranet_message_params) do
-    case Chats.update_intranet_message(socket.assigns.intranet_message, intranet_message_params) do
+    case Chat.update_intranet_message(socket.assigns.intranet_message, intranet_message_params) do
       {:ok, intranet_message} ->
         notify_parent({:saved, intranet_message})
 
@@ -64,7 +78,7 @@ defmodule FrixelIntranetWeb.IntranetMessageLive.FormComponent do
   end
 
   defp save_intranet_message(socket, :new, intranet_message_params) do
-    case Chats.create_intranet_message(intranet_message_params) do
+    case Chat.create_intranet_message(intranet_message_params) do
       {:ok, intranet_message} ->
         notify_parent({:saved, intranet_message})
 

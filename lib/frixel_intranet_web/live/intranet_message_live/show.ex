@@ -1,7 +1,7 @@
 defmodule FrixelIntranetWeb.IntranetMessageLive.Show do
   use FrixelIntranetWeb, :live_view
 
-  alias FrixelIntranet.Chats
+  alias FrixelIntranet.Chat
 
   @impl true
   def mount(_params, _session, socket) do
@@ -9,11 +9,15 @@ defmodule FrixelIntranetWeb.IntranetMessageLive.Show do
   end
 
   @impl true
-  def handle_params(%{"id" => id}, _, socket) do
+  def handle_params(params, _uri, socket) do
+    intranet_message = Chat.get_intranet_message!(params["id"])
+    conversation_id = intranet_message.intranet_conversation_id
+
     {:noreply,
      socket
-     |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:intranet_message, Chats.get_intranet_message!(id))}
+     |> assign(:intranet_message, intranet_message)
+     |> assign(:conversation_id, conversation_id)
+     |> assign(:page_title, "Show Intranet Message")}
   end
 
   defp page_title(:show), do: "Show Intranet message"

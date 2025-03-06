@@ -1,12 +1,12 @@
-defmodule FrixelIntranet.Chats do
+defmodule FrixelIntranet.Chat do
   @moduledoc """
-  The Chats context.
+  The Chat context.
   """
 
   import Ecto.Query, warn: false
   alias FrixelIntranet.Repo
 
-  alias FrixelIntranet.Chats.IntranetConversation
+  alias FrixelIntranet.Chat.{IntranetConversation, IntranetMessage}
 
   @doc """
   Returns the list of intranet_conversations.
@@ -102,7 +102,7 @@ defmodule FrixelIntranet.Chats do
     IntranetConversation.changeset(intranet_conversation, attrs)
   end
 
-  alias FrixelIntranet.Chats.IntranetMessage
+  alias FrixelIntranet.Chat.IntranetMessage
 
   @doc """
   Returns the list of intranet_messages.
@@ -196,5 +196,11 @@ defmodule FrixelIntranet.Chats do
   """
   def change_intranet_message(%IntranetMessage{} = intranet_message, attrs \\ %{}) do
     IntranetMessage.changeset(intranet_message, attrs)
+  end
+
+  def get_conversation_messages_by_id(id) do
+    intranetConversation
+    |> repo.get!(id)
+    |> repo.preload(:intranet_messages)
   end
 end
