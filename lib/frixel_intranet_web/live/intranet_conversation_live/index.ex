@@ -1,12 +1,12 @@
 defmodule FrixelIntranetWeb.IntranetConversationLive.Index do
   use FrixelIntranetWeb, :live_view
 
-  alias FrixelIntranet.Chats
-  alias FrixelIntranet.Chats.IntranetConversation
+  alias FrixelIntranet.Chat
+  alias FrixelIntranet.Chat.IntranetConversation
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, stream(socket, :intranet_conversations, Chats.list_intranet_conversations())}
+    {:ok, stream(socket, :intranet_conversations, Chat.list_intranet_conversations())}
   end
 
   @impl true
@@ -17,7 +17,7 @@ defmodule FrixelIntranetWeb.IntranetConversationLive.Index do
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
     |> assign(:page_title, "Edit Intranet conversation")
-    |> assign(:intranet_conversation, Chats.get_intranet_conversation!(id))
+    |> assign(:intranet_conversation, Chat.get_intranet_conversation!(id))
   end
 
   defp apply_action(socket, :new, _params) do
@@ -39,8 +39,8 @@ defmodule FrixelIntranetWeb.IntranetConversationLive.Index do
 
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
-    intranet_conversation = Chats.get_intranet_conversation!(id)
-    {:ok, _} = Chats.delete_intranet_conversation(intranet_conversation)
+    intranet_conversation = Chat.get_intranet_conversation!(id)
+    {:ok, _} = Chat.delete_intranet_conversation(intranet_conversation)
 
     {:noreply, stream_delete(socket, :intranet_conversations, intranet_conversation)}
   end

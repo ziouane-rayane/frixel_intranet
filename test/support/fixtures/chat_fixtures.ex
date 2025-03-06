@@ -1,7 +1,7 @@
-defmodule FrixelIntranet.ChatsFixtures do
+defmodule FrixelIntranet.ChatFixtures do
   @moduledoc """
   This module defines test helpers for creating
-  entities via the `FrixelIntranet.Chats` context.
+  entities via the `FrixelIntranet.Chat` context.
   """
 
   @doc """
@@ -15,7 +15,7 @@ defmodule FrixelIntranet.ChatsFixtures do
         conversation_topic: "some conversation_topic",
         conversation_type: :public
       })
-      |> FrixelIntranet.Chats.create_intranet_conversation()
+      |> FrixelIntranet.Chat.create_intranet_conversation()
 
     intranet_conversation
   end
@@ -29,7 +29,7 @@ defmodule FrixelIntranet.ChatsFixtures do
       |> Enum.into(%{
         message_body: "some message_body"
       })
-      |> FrixelIntranet.Chats.create_intranet_message()
+      |> FrixelIntranet.Chat.create_intranet_message()
 
     intranet_message
   end

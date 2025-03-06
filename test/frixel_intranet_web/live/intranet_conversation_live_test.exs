@@ -2,7 +2,7 @@ defmodule FrixelIntranetWeb.IntranetConversationLiveTest do
   use FrixelIntranetWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  import FrixelIntranet.ChatsFixtures
+  import FrixelIntranet.ChatFixtures
 
   @create_attrs %{conversation_type: :public, conversation_status: :active, conversation_topic: "some conversation_topic"}
   @update_attrs %{conversation_type: :private, conversation_status: :archived, conversation_topic: "some updated conversation_topic"}

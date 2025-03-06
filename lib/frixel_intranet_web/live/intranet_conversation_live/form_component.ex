@@ -1,7 +1,7 @@
 defmodule FrixelIntranetWeb.IntranetConversationLive.FormComponent do
   use FrixelIntranetWeb, :live_component
 
-  alias FrixelIntranet.Chats
+  alias FrixelIntranet.Chat
 
   @impl true
   def render(assigns) do
@@ -24,14 +24,14 @@ defmodule FrixelIntranetWeb.IntranetConversationLive.FormComponent do
           type="select"
           label="Conversation type"
           prompt="Choose a value"
-          options={Ecto.Enum.values(FrixelIntranet.Chats.IntranetConversation, :conversation_type)}
+          options={Ecto.Enum.values(FrixelIntranet.Chat.IntranetConversation, :conversation_type)}
         />
         <.input
           field={@form[:conversation_status]}
           type="select"
           label="Conversation status"
           prompt="Choose a value"
-          options={Ecto.Enum.values(FrixelIntranet.Chats.IntranetConversation, :conversation_status)}
+          options={Ecto.Enum.values(FrixelIntranet.Chat.IntranetConversation, :conversation_status)}
         />
         <.input field={@form[:conversation_topic]} type="text" label="Conversation topic" />
         <:actions>
@@ -48,13 +48,13 @@ defmodule FrixelIntranetWeb.IntranetConversationLive.FormComponent do
      socket
      |> assign(assigns)
      |> assign_new(:form, fn ->
-       to_form(Chats.change_intranet_conversation(intranet_conversation))
+       to_form(Chat.change_intranet_conversation(intranet_conversation))
      end)}
   end
 
   @impl true
   def handle_event("validate", %{"intranet_conversation" => intranet_conversation_params}, socket) do
-    changeset = Chats.change_intranet_conversation(socket.assigns.intranet_conversation, intranet_conversation_params)
+    changeset = Chat.change_intranet_conversation(socket.assigns.intranet_conversation, intranet_conversation_params)
     {:noreply, assign(socket, form: to_form(changeset, action: :validate))}
   end
 
@@ -63,7 +63,7 @@ defmodule FrixelIntranetWeb.IntranetConversationLive.FormComponent do
   end
 
   defp save_intranet_conversation(socket, :edit, intranet_conversation_params) do
-    case Chats.update_intranet_conversation(socket.assigns.intranet_conversation, intranet_conversation_params) do
+    case Chat.update_intranet_conversation(socket.assigns.intranet_conversation, intranet_conversation_params) do
       {:ok, intranet_conversation} ->
         notify_parent({:saved, intranet_conversation})
 
@@ -78,7 +78,7 @@ defmodule FrixelIntranetWeb.IntranetConversationLive.FormComponent do
   end
 
   defp save_intranet_conversation(socket, :new, intranet_conversation_params) do
-    case Chats.create_intranet_conversation(intranet_conversation_params) do
+    case Chat.create_intranet_conversation(intranet_conversation_params) do
       {:ok, intranet_conversation} ->
         notify_parent({:saved, intranet_conversation})
 

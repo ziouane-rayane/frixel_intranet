@@ -6,7 +6,6 @@ defmodule FrixelIntranet.Repo.Migrations.CreateIntranetConversations do
       add :conversation_type, :string
       add :conversation_status, :string
       add :conversation_topic, :string
-
       timestamps(type: :utc_datetime)
     end
   end
